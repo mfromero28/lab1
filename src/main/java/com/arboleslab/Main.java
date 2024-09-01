@@ -6,7 +6,7 @@ package com.arboleslab;
  *
  * @author marro
  */
-public class EDD2LAB1 {
+public class Main {
 
     public static void main(String[] args) {
       
