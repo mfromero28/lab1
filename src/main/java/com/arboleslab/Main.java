@@ -68,20 +68,64 @@ public class Main {
 
                 switch (option) {
                     case "1":
+                        // Opción para insertar un nuevo nodo
+                        System.out.print("Ingrese el título de la película: ");
+                        String title = scanner.nextLine();
+                        System.out.print("Ingrese el año de la película: ");
+                        int year = Integer.parseInt(scanner.nextLine());
+                        System.out.print("Ingrese los ingresos mundiales: ");
+                        double worldwideEarnings = Double.parseDouble(scanner.nextLine());
+                        System.out.print("Ingrese los ingresos domésticos: ");
+                        double domesticEarnings = Double.parseDouble(scanner.nextLine());
+                        System.out.print("Ingrese los ingresos extranjeros: ");
+                        double foreignEarnings = Double.parseDouble(scanner.nextLine());
+                        System.out.print("Ingrese el porcentaje doméstico: ");
+                        double domesticPercent = Double.parseDouble(scanner.nextLine());
+                        System.out.print("Ingrese el porcentaje extranjero: ");
+                        double foreignPercent = Double.parseDouble(scanner.nextLine());
+
+                        MovieNode newNode = new MovieNode(title, year, worldwideEarnings, domesticEarnings,
+                                foreignEarnings, domesticPercent, foreignPercent);
+                        tree.insert(newNode);
+                        System.out.println("Nodo insertado correctamente.");
+                        break;
 
                     case "2":
+                        // Opción para eliminar un nodo (funcionalidad no implementada en la clase MovieTree)
+                        System.out.println("La eliminación de nodos no está implementada.");
+                        break;
 
                     case "3":
+                        // Opción para buscar un nodo
+                        System.out.print("Ingrese el título de la película a buscar: ");
+                        String searchTitle = scanner.nextLine();
+                        MovieNode foundNode = tree.search(searchTitle);
+                        if (foundNode != null) {
+                            System.out.println("Película encontrada: " + foundNode.getTitle() + " (" + foundNode.getYear() + ")");
+                        } else {
+                            System.out.println("Película no encontrada.");
+                        }
+                        break;
 
                     case "4":
+                        // Opción para buscar nodos que cumplan ciertos criterios (puedes expandir esta lógica)
+                        System.out.println("Esta opción no está implementada aún.");
+                        break;
 
                     case "5":
+                        // Mostrar el recorrido por niveles del árbol
+                        tree.levelOrderTraversal();
+                        break;
 
                     case "6":
+                        // Mostrar detalles del árbol
+                        System.out.println("Funcionalidad para mostrar árbol no implementada.");
+                        break;
 
                     case "7":
                         System.out.println("\n Hasta pronto \n");
                         return;
+
                     default:
                         System.out.println("El valor ingresado no se encuentra dentro de las opciones, por favor intente nuevamente.");
                 }
@@ -105,17 +149,54 @@ public class Main {
 
                 switch (choice) {
                     case "1":
+                        // Obtener el nivel del nodo
+                        int level = tree.getNodeLevel(node);
+                        if (level != -1) {
+                            System.out.println("El nivel del nodo " + node + " es: " + level);
+                        } else {
+                            System.out.println("Nodo no encontrado.");
+                        }
+                        break;
 
                     case "2":
-//                      
+                        // Obtener el factor de balanceo del nodo (funcionalidad no implementada en la clase MovieTree)
+                        System.out.println("Funcionalidad para obtener el factor de balanceo no implementada.");
+                        break;
+
                     case "3":
+                        // Encontrar el padre del nodo
+                        MovieNode parent = tree.getParent(node);
+                        if (parent != null) {
+                            System.out.println("El padre del nodo " + node + " es: " + parent.getTitle());
+                        } else {
+                            System.out.println("El nodo no tiene padre o no se encontró.");
+                        }
+                        break;
 
                     case "4":
+                        // Encontrar el abuelo del nodo
+                        MovieNode grandparent = tree.getGrandparent(node);
+                        if (grandparent != null) {
+                            System.out.println("El abuelo del nodo " + node + " es: " + grandparent.getTitle());
+                        } else {
+                            System.out.println("El nodo no tiene abuelo o no se encontró.");
+                        }
+                        break;
 
                     case "5":
+                        // Encontrar el tío del nodo
+                        MovieNode uncle = tree.getUncle(node);
+                        if (uncle != null) {
+                            System.out.println("El tío del nodo " + node + " es: " + uncle.getTitle());
+                        } else {
+                            System.out.println("El nodo no tiene tío o no se encontró.");
+                        }
+                        break;
 
                     case "6":
+                        // Salir del submenú
                         return;
+
                     default:
                         System.out.println("El valor ingresado no se encuentra dentro de las opciones, por favor intente nuevamente.");
                 }
