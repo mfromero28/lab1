@@ -17,12 +17,12 @@ public class Main {
             while ((line = br.readLine()) != null) {
                 String[] data = line.split(",");
                 String title = data[0];
-                int year = Integer.parseInt(data[1]);
-                double worldwideEarnings = Double.parseDouble(data[2]);
-                double domesticEarnings = Double.parseDouble(data[3]);
+                int year = Integer.parseInt(data[6]);
+                double worldwideEarnings = Double.parseDouble(data[1]);
+                double domesticEarnings = Double.parseDouble(data[2]);
                 double foreignEarnings = Double.parseDouble(data[4]);
-                double domesticPercent = Double.parseDouble(data[5]);
-                double foreignPercent = Double.parseDouble(data[6]);
+                double domesticPercent = Double.parseDouble(data[3]);
+                double foreignPercent = Double.parseDouble(data[5]);
 
                 MovieNode movieNode = new MovieNode(title, year, worldwideEarnings, domesticEarnings,
                         foreignEarnings, domesticPercent, foreignPercent);
@@ -52,7 +52,7 @@ public class Main {
             System.out.print("Por favor, ingrese su nombre: ");
             String name = scanner.nextLine();
 
-            System.out.println("\nBienvenido, ¡" + name + "Qué función desea ejecutar:");
+            System.out.println("\nBienvenido, ¡" + name + " Qué función desea ejecutar:");
 
             while (true) {
                 System.out.println("1. Insertar un nodo.");
