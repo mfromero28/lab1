@@ -1,51 +1,30 @@
 package com.arboleslab;
 
 public class MovieNode {
-    String title;
-    int year;
-    double WorldwideEarnings;
-    double DomesticEarnings;
-    double ForeignEarnings;
-    double DomesticPercentEarning;
-    double ForeignPercentEarnins;
-    MovieNode left, right;
-    int height;
-    
+    private String title;
+    private int year;
+    private double worldwideEarnings;
+    private double domesticEarnings;
+    private double foreignEarnings;
+    private double domesticPercent;
+    private double foreignPercent;
+    private MovieNode left;
+    private MovieNode right;
 
-    public MovieNode(String title, int year, double DomesticEarnings, double ForeignEarnings, double foreignEarnings, double domesticPercent, double foreignPercent) {
+    public MovieNode(String title, int year, double worldwideEarnings, double domesticEarnings,
+                     double foreignEarnings, double domesticPercent, double foreignPercent) {
         this.title = title;
         this.year = year;
-        this.DomesticEarnings = DomesticEarnings;
-        this.ForeignEarnings = ForeignEarnings;
-        this.left=null;
-        this.right=null;
-        this.height=1;
+        this.worldwideEarnings = worldwideEarnings;
+        this.domesticEarnings = domesticEarnings;
+        this.foreignEarnings = foreignEarnings;
+        this.domesticPercent = domesticPercent;
+        this.foreignPercent = foreignPercent;
+        this.left = null;
+        this.right = null;
     }
 
-    public double getWorldwideEarnings() {
-        return WorldwideEarnings;
-    }
-
-    public void setWorldwideEarnings(double WorldwideEarnings) {
-        this.WorldwideEarnings = WorldwideEarnings;
-    }
-
-    public double getDomesticEarnings() {
-        return DomesticEarnings;
-    }
-
-    public void setDomesticEarnings(double DomesticEarnings) {
-        this.DomesticEarnings = DomesticEarnings;
-    }
-
-    public double getDomesticPercentEarning() {
-        return DomesticPercentEarning;
-    }
-
-    public void setDomesticPercentEarning(double DomesticPercentEarning) {
-        this.DomesticPercentEarning = DomesticPercentEarning;
-    }
-
+    // Getters y Setters
     public String getTitle() {
         return title;
     }
@@ -54,14 +33,39 @@ public class MovieNode {
         return year;
     }
 
-    public double getForeignEarnings() {
-        return ForeignEarnings;
+    public double getWorldwideEarnings() {
+        return worldwideEarnings;
     }
 
-    public double getForeignPercentEarnins() {
-        return ForeignPercentEarnins;
+    public double getDomesticEarnings() {
+        return domesticEarnings;
     }
-    
-   
-    
+
+    public double getForeignEarnings() {
+        return foreignEarnings;
+    }
+
+    public double getDomesticPercent() {
+        return domesticPercent;
+    }
+
+    public double getForeignPercent() {
+        return foreignPercent;
+    }
+
+    public MovieNode getLeft() {
+        return left;
+    }
+
+    public void setLeft(MovieNode left) {
+        this.left = left;
+    }
+
+    public MovieNode getRight() {
+        return right;
+    }
+
+    public void setRight(MovieNode right) {
+        this.right = right;
+    }
 }

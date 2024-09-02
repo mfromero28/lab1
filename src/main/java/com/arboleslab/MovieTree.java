@@ -7,168 +7,180 @@ package com.arboleslab;
 public class MovieTree {
     private MovieNode root;
 
-    // Inserta un nuevo nodo en el árbol AVL
-    public void insert(MovieNode newNode) {
-        root = insertNode(root, newNode);
+    public MovieTree() {
+        this.root = null;
     }
 
-    // Método recursivo para insertar un nodo en el árbol
-    private MovieNode insertNode(MovieNode current, MovieNode newNode) {
+    public void insert(MovieNode movieNode) {
+        if (root == null) {
+            root = movieNode;
+        } else {
+            root = insert(root, movieNode);
+        }
+    }
+
+    private MovieNode insert(MovieNode current, MovieNode movieNode) {
         if (current == null) {
-            return newNode;
+            return movieNode;
         }
 
-        // Inserta en el subárbol correspondiente
-        if (newNode.title.compareTo(current.title) < 0) {
-            current.left = insertNode(current.left, newNode);
-        } else if (newNode.title.compareTo(current.title) > 0) {
-            current.right = insertNode(current.right, newNode);
-        } else {
-            // Si el título ya existe, no se inserta
-            return current;
+        if (movieNode.getTitle().compareTo(current.getTitle()) < 0) {
+            current.setLeft(insert(current.getLeft(), movieNode));
+        } else if (movieNode.getTitle().compareTo(current.getTitle()) > 0) {
+            current.setRight(insert(current.getRight(), movieNode));
         }
 
-        // Actualiza la altura del nodo actual
-        current.height = 1 + Math.max(getHeight(current.left), getHeight(current.right));
-
-        // Balancea el árbol si es necesario
-        return balanceTree(current, newNode.title);
+        return balanceTree(current);
     }
 
-    // Elimina un nodo del árbol por su título
-    public void delete(String title) {
-        root = deleteNode(root, title);
-    }
-
-    // Método recursivo para eliminar un nodo
-    private MovieNode deleteNode(MovieNode current, String title) {
-        if (current == null) return null;
-
-        // Navega hasta el nodo que se debe eliminar
-        if (title.compareTo(current.title) < 0) {
-            current.left = deleteNode(current.left, title);
-        } else if (title.compareTo(current.title) > 0) {
-            current.right = deleteNode(current.right, title);
-        } else {
-            // Caso: nodo encontrado
-            if (current.left == null || current.right == null) {
-                // Nodo con un solo hijo o sin hijos
-                return (current.left != null) ? current.left : current.right;
-            } else {
-                // Nodo con dos hijos: encuentra el sucesor en el subárbol derecho
-                MovieNode temp = getMinValueNode(current.right);
-                current.title = temp.title;
-                current.right = deleteNode(current.right, temp.title);
-            }
+    private int height(MovieNode node) {
+        if (node == null) {
+            return 0;
         }
-
-        current.height = 1 + Math.max(getHeight(current.left), getHeight(current.right));
-        return balanceTree(current, title);
+        return 1 + Math.max(height(node.getLeft()), height(node.getRight()));
     }
 
-    // Busca un nodo por título
-    public MovieNode search(String title) {
-        return searchNode(root, title);
-    }
-
-    // Método recursivo para buscar un nodo
-    private MovieNode searchNode(MovieNode current, String title) {
-        if (current == null || current.title.equals(title)) {
-            return current;
+    private int getBalance(MovieNode node) {
+        if (node == null) {
+            return 0;
         }
-        if (title.compareTo(current.title) < 0) {
-            return searchNode(current.left, title);
-        } else {
-            return searchNode(current.right, title);
-        }
+        return height(node.getLeft()) - height(node.getRight());
     }
 
-    // Muestra el recorrido por niveles del árbol
-    public void levelOrderTraversal() {
-        if (root == null) return;
-
-        // Cola para almacenar los nodos en el nivel actual
-        java.util.Queue<MovieNode> queue = new java.util.LinkedList<>();
-        queue.add(root);
-
-        while (!queue.isEmpty()) {
-            MovieNode current = queue.poll();
-            System.out.println(current.getTitle()); // Muestra el título del nodo
-
-            if (current.left != null) queue.add(current.left);
-            if (current.right != null) queue.add(current.right);
-        }
-    }
-
-    // Obtiene la altura de un nodo
-    private int getHeight(MovieNode node) {
-        return (node == null) ? 0 : node.height;
-    }
-
-    // Balancea el árbol AVL después de una inserción o eliminación
-    private MovieNode balanceTree(MovieNode node, String key) {
+    private MovieNode balanceTree(MovieNode node) {
         int balance = getBalance(node);
 
-        // Rotación simple a la derecha
-        if (balance > 1 && key.compareTo(node.left.title) < 0) {
+        if (balance > 1) {
+            if (getBalance(node.getLeft()) < 0) {
+                node.setLeft(rotateLeft(node.getLeft()));
+            }
             return rotateRight(node);
         }
 
-        // Rotación simple a la izquierda
-        if (balance < -1 && key.compareTo(node.right.title) > 0) {
-            return rotateLeft(node);
-        }
-
-        // Rotación doble izquierda-derecha
-        if (balance > 1 && key.compareTo(node.left.title) > 0) {
-            node.left = rotateLeft(node.left);
-            return rotateRight(node);
-        }
-
-        // Rotación doble derecha-izquierda
-        if (balance < -1 && key.compareTo(node.right.title) < 0) {
-            node.right = rotateRight(node.right);
+        if (balance < -1) {
+            if (getBalance(node.getRight()) > 0) {
+                node.setRight(rotateRight(node.getRight()));
+            }
             return rotateLeft(node);
         }
 
         return node;
     }
 
-    // Rotación hacia la derecha
-    private MovieNode rotateRight(MovieNode y) {
-        MovieNode x = y.left;
-        y.left = x.right;
-        x.right = y;
+    private MovieNode rotateLeft(MovieNode z) {
+        MovieNode y = z.getRight();
+        MovieNode t2 = y.getLeft();
 
-        // Actualiza las alturas
-        y.height = Math.max(getHeight(y.left), getHeight(y.right)) + 1;
-        x.height = Math.max(getHeight(x.left), getHeight(x.right)) + 1;
-
-        return x;
-    }
-
-    // Rotación hacia la izquierda
-    private MovieNode rotateLeft(MovieNode x) {
-        MovieNode y = x.right;
-        x.right = y.left;
-        y.left = x;
-
-        // Actualiza las alturas
-        x.height = Math.max(getHeight(x.left), getHeight(x.right)) + 1;
-        y.height = Math.max(getHeight(y.left), getHeight(y.right)) + 1;
+        y.setLeft(z);
+        z.setRight(t2);
 
         return y;
     }
 
-    // Obtiene el balance de un nodo
-    private int getBalance(MovieNode node) {
-        if (node == null) return 0;
-        return getHeight(node.left) - getHeight(node.right);
+    private MovieNode rotateRight(MovieNode y) {
+        MovieNode z = y.getLeft();
+        MovieNode t3 = z.getRight();
+
+        z.setRight(y);
+        y.setLeft(t3);
+
+        return z;
     }
 
-    // Encuentra el nodo con el valor mínimo en un subárbol
-    private MovieNode getMinValueNode(MovieNode node) {
-        while (node.left != null) node = node.left;
-        return node;
+    public MovieNode search(String title) {
+        return search(root, title);
     }
+
+    private MovieNode search(MovieNode node, String title) {
+        if (node == null || node.getTitle().equals(title)) {
+            return node;
+        }
+
+        if (title.compareTo(node.getTitle()) < 0) {
+            return search(node.getLeft(), title);
+        }
+
+        return search(node.getRight(), title);
+    }
+
+    public void levelOrderTraversal() {
+        if (root == null) {
+            System.out.println("El árbol está vacío.");
+            return;
+        }
+
+        levelOrderTraversal(root, 0);
+    }
+
+    private void levelOrderTraversal(MovieNode node, int level) {
+        if (node == null) {
+            return;
+        }
+
+        System.out.println("Nivel " + level + ": " + node.getTitle());
+        levelOrderTraversal(node.getLeft(), level + 1);
+        levelOrderTraversal(node.getRight(), level + 1);
+    }
+
+    public int getNodeLevel(String title) {
+        return getNodeLevel(root, title, 0);
+    }
+
+    private int getNodeLevel(MovieNode node, String title, int level) {
+        if (node == null) {
+            return -1;
+        }
+
+        if (node.getTitle().equals(title)) {
+            return level;
+        }
+
+        int downlevel = getNodeLevel(node.getLeft(), title, level + 1);
+        if (downlevel != -1) {
+            return downlevel;
+        }
+
+        return getNodeLevel(node.getRight(), title, level + 1);
+    }
+
+    public MovieNode getParent(String title) {
+        return getParent(root, title, null);
+    }
+
+    private MovieNode getParent(MovieNode node, String title, MovieNode parent) {
+        if (node == null) {
+            return null;
+        }
+
+        if (node.getTitle().equals(title)) {
+            return parent;
+        }
+
+        if (title.compareTo(node.getTitle()) < 0) {
+            return getParent(node.getLeft(), title, node);
+        } else {
+            return getParent(node.getRight(), title, node);
+        }
+    }
+
+    public MovieNode getGrandparent(String title) {
+        MovieNode parent = getParent(title);
+        return (parent != null) ? getParent(parent.getTitle()) : null;
+    }
+
+    public MovieNode getUncle(String title) {
+        MovieNode parent = getParent(title);
+        MovieNode grandparent = getGrandparent(title);
+
+        if (grandparent == null) {
+            return null;
+        }
+
+        if (grandparent.getLeft() == parent) {
+            return grandparent.getRight();
+        } else {
+            return grandparent.getLeft();
+        }
+    }
+
 }
